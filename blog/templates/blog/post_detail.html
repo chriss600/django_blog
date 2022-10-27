@@ -7,7 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{post.title}} - Blog</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <link rel='stylesheet' href='{% static "css/style.css" %}'>
+   
 </head>
 
 <body>
@@ -36,6 +38,7 @@
                     <header class="mb-4">
                         <!-- Post title-->
                         <h1 class="fw-bolder mb-1">{{post.title}}</h1>
+                        <h5 class='text_muted'>{{ post.hook_text}}</h5>
                         <!-- Post meta content-->
                         <div class="text-muted fst-italic mb-2">{{post.created_at}}</div>
                         <!-- Post categories-->
@@ -43,10 +46,30 @@
                         <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
                     </header>
                     <!-- Preview image figure-->
-                    <figure class="mb-4"><img class="img-fluid rounded" src="{{post.head_image.url}}" alt="..." /></figure>
+                    {% if post.head_image %}
+                        <figure class="mb-4"><img class="img-fluid rounded" src="{{post.head_image.url}}" alt="..." /></figure>
+                    {% else %}
+                    <figure class="mb-4"><img class="img-fluid rounded" src="https://picsum.photos/seed/{{post.pk}}/900/600" alt="random image" /></figure>
+                    {% endif %}
                     <!-- Post content-->
                     <section class="mb-5">
                         <p>{{post.content}}</p>
+                        {% if post.file_upload %}
+                            <a href='{{post.file_upload.url}}' class ='btn btn-outline-dark' role='button' download>Download:
+                                {% if post.get_file_ext == "pdf" %}
+                                <i class="bi bi-file-pdf"></i>
+                                {% elif post.get_file_ext == "jpg" or 'jpeg' %}
+                                <i class="bi bi-file-image"></i>
+                                {% elif post.get_file_ext == 'txt' %}
+                                <i class="bi bi-filetype-txt"></i>
+                                {% elif post.get_file_ext == 'doc' %}
+                                <i class="bi bi-file-earmark-word"></i>
+                                {% else %}
+                                <i class="bi bi-file-arrow-down"></i>
+                                {% endif %}
+                                {{post.get_file_name}}
+                            </a>
+                        {% endif %}
                     </section>
                 </article>
                 <!-- Comments section-->
